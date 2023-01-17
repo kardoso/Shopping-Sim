@@ -9,7 +9,8 @@ public abstract class Interactable : MonoBehaviour
     protected bool isCloseEnoughToPlayer = false;
     protected bool isShowingDialog = false;
 
-    protected virtual void Update() {
+    protected virtual void Update()
+    {
         CheckForPlayer();
     }
 
@@ -23,14 +24,20 @@ public abstract class Interactable : MonoBehaviour
             return (p.transform.position - this.transform.position)
                 .magnitude <= checkPlayerRadius;
         });
-        if (_player != null) {
+        if (_player != null)
+        {
             isCloseEnoughToPlayer = true;
-            if (!isShowingDialog) {
+            if (!isShowingDialog)
+            {
                 interactionIndicator.SetActive(true);
-            } else {
+            }
+            else
+            {
                 interactionIndicator.SetActive(false);
             }
-        } else {
+        }
+        else
+        {
             isCloseEnoughToPlayer = false;
             interactionIndicator.SetActive(false);
         }
