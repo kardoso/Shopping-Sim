@@ -9,6 +9,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D body;
     private bool canMove = true;
 
+    public Animator legsAnimator;
+    public SpriteRenderer legsSprite;
+    public Animator headAnimator;
+    public SpriteRenderer headSprite;
+    public Animator torsoAnimator;
+    public SpriteRenderer torsoSprite;
+
     [SerializeField] private float interactionRadius = 1.5f;
 
     void Start()
@@ -28,6 +35,23 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMovement();
+        var inputIsBeingPressed = Mathf.Abs(inputY) + Mathf.Abs(inputX) > 0;
+        if(inputIsBeingPressed)
+        {
+            legsAnimator.SetFloat("moveX", inputX);
+            legsAnimator.SetFloat("moveY", inputY);
+            headAnimator.SetFloat("moveX", inputX);
+            headAnimator.SetFloat("moveY", inputY);
+            torsoAnimator.SetFloat("moveX", inputX);
+            torsoAnimator.SetFloat("moveY", inputY);
+
+            if (inputX != 0) legsSprite.flipX = inputX > 0;
+            if (inputX != 0) headSprite.flipX = inputX > 0;
+            if (inputX != 0) torsoSprite.flipX = inputX > 0;
+        }
+        legsAnimator.SetBool("walking", inputIsBeingPressed);
+        headAnimator.SetBool("walking", inputIsBeingPressed);
+        torsoAnimator.SetBool("walking", inputIsBeingPressed);
     }
 
     void CaptureInput()
