@@ -7,16 +7,21 @@ public class StoreItem : MonoBehaviour
     [SerializeField] int price = 200;
     [SerializeField] TMP_Text priceText;
     PlayerInventory playerInventory;
+    PlayerController playerController;
     bool isOnInventory = false;
     [SerializeField] GameObject itemOnInventoryOptions;
     [SerializeField] GameObject itemNotOnInventoryOptions;
     private GameObject eventSystemGO;
+
+    [SerializeField] StoreItemType itemType;
+    [SerializeField] RuntimeAnimatorController itemAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
         priceText.text = price.ToString();
         playerInventory = FindObjectOfType<PlayerInventory>();
+        playerController = FindObjectOfType<PlayerController>();
         eventSystemGO = GameObject.Find("EventSystem");
     }
 
@@ -38,13 +43,45 @@ public class StoreItem : MonoBehaviour
             isOnInventory = false;
             playerInventory.AddCoins(price);
             playerInventory.RemoveItem(id);
+            CheckIfItemIsBeingUsedAndChangeToDefault();
         }
         UpdateItemStatus();
     }
 
+    public void CheckIfItemIsBeingUsedAndChangeToDefault()
+    {
+        switch (itemType)
+        {
+            case StoreItemType.Head:
+                if (playerController.CurrentHeadItemId == id) playerController.ChangeHead();
+                return;
+
+            case StoreItemType.Torso:
+                if (playerController.CurrentTorsoItemId == id) playerController.ChangeTorso();
+                return;
+
+            case StoreItemType.Legs:
+                if (playerController.CurrentLegsItemId == id) playerController.ChangeLegs();
+                return;
+        }
+    }
+
     public void WearItem()
     {
-        Debug.Log("Use");
+        switch (itemType)
+        {
+            case StoreItemType.Head:
+                playerController.ChangeHead(id, itemAnimator);
+                return;
+
+            case StoreItemType.Torso:
+                playerController.ChangeTorso(id, itemAnimator);
+                return;
+
+            case StoreItemType.Legs:
+                playerController.ChangeLegs(id, itemAnimator);
+                return;
+        }
     }
 
     void UpdateItemStatus()
@@ -65,3 +102,10 @@ public class StoreItem : MonoBehaviour
         }
     }
 }
+
+public enum StoreItemType
+{
+    Head = 1,
+    Torso = 2,
+    Legs = 3,
+};

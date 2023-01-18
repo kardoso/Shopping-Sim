@@ -12,12 +12,20 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D body;
     private bool canMove = true;
 
+    public RuntimeAnimatorController defaultLegsAnimator;
     public Animator legsAnimator;
     public SpriteRenderer legsSprite;
+    public int CurrentLegsItemId { get; private set; } = 0; // 0 is the default value, an item with id 0 must not exist in the game
+
+    public RuntimeAnimatorController defaultHeadAnimator;
     public Animator headAnimator;
     public SpriteRenderer headSprite;
+    public int CurrentHeadItemId { get; private set; } = 0; // 0 is the default value, an item with id 0 must not exist in the game
+
+    public RuntimeAnimatorController defaultTorsoAnimator;
     public Animator torsoAnimator;
     public SpriteRenderer torsoSprite;
+    public int CurrentTorsoItemId { get; private set; } = 0; // 0 is the default value, an item with id 0 must not exist in the game
 
     [SerializeField] private float interactionRadius = 1.5f;
 
@@ -105,5 +113,47 @@ public class PlayerController : MonoBehaviour
     public void EnableMovement()
     {
         canMove = true;
+    }
+
+    public void ChangeHead(int itemId = 0, RuntimeAnimatorController animatorController = null)
+    {
+        CurrentHeadItemId = itemId;
+
+        if (animatorController != null)
+        {
+            headAnimator.runtimeAnimatorController = animatorController;
+
+            return;
+        }
+
+        headAnimator.runtimeAnimatorController = defaultHeadAnimator;
+    }
+
+    public void ChangeTorso(int itemId = 0, RuntimeAnimatorController animatorController = null)
+    {
+        CurrentTorsoItemId = itemId;
+
+        if (animatorController != null)
+        {
+            torsoAnimator.runtimeAnimatorController = animatorController;
+
+            return;
+        }
+
+        torsoAnimator.runtimeAnimatorController = defaultTorsoAnimator;
+    }
+
+    public void ChangeLegs(int itemId = 0, RuntimeAnimatorController animatorController = null)
+    {
+        CurrentLegsItemId = itemId;
+
+        if (animatorController != null)
+        {
+            legsAnimator.runtimeAnimatorController = animatorController;
+
+            return;
+        }
+
+        legsAnimator.runtimeAnimatorController = defaultLegsAnimator;
     }
 }

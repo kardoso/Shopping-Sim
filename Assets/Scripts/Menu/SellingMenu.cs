@@ -1,11 +1,29 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SellingMenu : MonoBehaviour
 {
     [SerializeField] protected Seller seller;
+    [SerializeField] GameObject firstSelect;
+    GameObject lastSelect;
 
-    [SerializeField] GameObject firstItem;
+    void Start()
+    {
+        lastSelect = firstSelect;
+    }
+
+    void Update()
+    {
+        if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(lastSelect);
+        }
+        else
+        {
+            lastSelect = EventSystem.current.currentSelectedGameObject;
+        }
+    }
 
     public void CloseStore()
     {
