@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 5;
     private float inputX = 0;
     private float inputY = 0;
+    // Needs direction for animation
+    private float directionX = 0;
+    private float directionY = 0;
     private Rigidbody2D body;
     private bool canMove = true;
 
@@ -35,20 +38,32 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMovement();
-        var inputIsBeingPressed = Mathf.Abs(inputY) + Mathf.Abs(inputX) > 0;
-        if(inputIsBeingPressed)
-        {
-            legsAnimator.SetFloat("moveX", inputX);
-            legsAnimator.SetFloat("moveY", inputY);
-            headAnimator.SetFloat("moveX", inputX);
-            headAnimator.SetFloat("moveY", inputY);
-            torsoAnimator.SetFloat("moveX", inputX);
-            torsoAnimator.SetFloat("moveY", inputY);
+        SetAnimationValues();
+    }
 
-            if (inputX != 0) legsSprite.flipX = inputX > 0;
-            if (inputX != 0) headSprite.flipX = inputX > 0;
-            if (inputX != 0) torsoSprite.flipX = inputX > 0;
+    void SetAnimationValues()
+    {
+        var inputIsBeingPressed = Mathf.Abs(inputY) + Mathf.Abs(inputX) > 0;
+        if (inputIsBeingPressed)
+        {
+            directionX = inputX;
+            directionY = inputY;
         }
+
+        legsAnimator.SetFloat("moveX", directionX);
+        legsAnimator.SetFloat("moveY", directionY);
+        headAnimator.SetFloat("moveX", directionX);
+        headAnimator.SetFloat("moveY", directionY);
+        torsoAnimator.SetFloat("moveX", directionX);
+        torsoAnimator.SetFloat("moveY", directionY);
+
+        if (directionX != 0)
+        {
+            legsSprite.flipX = directionX > 0;
+            headSprite.flipX = directionX > 0;
+            torsoSprite.flipX = directionX > 0;
+        }
+
         legsAnimator.SetBool("walking", inputIsBeingPressed);
         headAnimator.SetBool("walking", inputIsBeingPressed);
         torsoAnimator.SetBool("walking", inputIsBeingPressed);
