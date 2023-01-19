@@ -37,7 +37,6 @@ public class PlayerInventory : MonoBehaviour
     {
         coins += amount;
         coinText.text = coins.ToString();
-        Debug.Log("total coins: " + coins);
     }
 
     // will return false if there's not enough coins to remove
@@ -48,7 +47,6 @@ public class PlayerInventory : MonoBehaviour
         {
             coins = coins - amount;
             coinText.text = coins.ToString();
-            Debug.Log("total coins: " + coins);
             return true;
         }
 
